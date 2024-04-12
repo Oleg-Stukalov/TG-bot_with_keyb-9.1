@@ -18,12 +18,9 @@ BOT_TOKEN = env('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Заполняем список списками с кнопками
-keyboard: list[list[KeyboardButton]] = [
-    [KeyboardButton(text=f'Кнопка {i}')] for i in range(1, 351)]
-
 # Инициализируем билдер
 kb_builder = ReplyKeyboardBuilder()
+
 
 # Создаем первый список с кнопками
 buttons_1: list[KeyboardButton] = [

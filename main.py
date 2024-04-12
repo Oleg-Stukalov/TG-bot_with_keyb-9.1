@@ -17,15 +17,18 @@ BOT_TOKEN = env('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Создаем объекты кнопок
-button_1 = KeyboardButton(text='Собак 🦮')
-button_2 = KeyboardButton(text='Огурцов 🥒')
+# Создаем список списков с кнопками
+keyboard: list[list[KeyboardButton]] = [
+    [KeyboardButton(text=str(i)) for i in range(1, 4)],
+    [KeyboardButton(text=str(i)) for i in range(4, 7)]
+]
+
+keyboard.append(KeyboardButton(text='7'))
 
 # Создаем объект клавиатуры, добавляя в него кнопки
 keyboard = ReplyKeyboardMarkup(
-    keyboard=[[button_1, button_2]],
-    resize_keyboard=True,
-    one_time_keyboard=True
+    keyboard=keyboard,
+    resize_keyboard=True
 )
 
 
@@ -39,24 +42,6 @@ async def process_start_command(message: Message):
     )
 
 
-# Этот хэндлер будет срабатывать на ответ "Собак 🦮"
-@dp.message(F.text == 'Собак 🦮')
-async def process_dog_answer(message: Message):
-    await message.answer(
-        text='Да, несомненно, кошки боятся собак. '
-             'Но вы видели как они боятся огурцов?',
-        reply_markup=ReplyKeyboardRemove()
-    )
-
-
-# Этот хэндлер будет срабатывать на ответ "Огурцов 🥒"
-@dp.message(F.text == 'Огурцов 🥒')
-async def process_cucumber_answer(message: Message):
-    await message.answer(
-        text='Да, иногда кажется, что огурцов '
-             'кошки боятся больше',
-        reply_markup=ReplyKeyboardRemove()
-    )
 
 
 if __name__ == '__main__':
