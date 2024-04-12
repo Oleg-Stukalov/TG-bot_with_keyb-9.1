@@ -24,7 +24,7 @@ keyboard: list[list[KeyboardButton]] = [
     [KeyboardButton(text=str(i)) for i in range(4, 7)]
 ]
 
-keyboard.append(KeyboardButton(text='7'))
+keyboard.append([KeyboardButton(text='7')])
 
 # Создаем объект клавиатуры, добавляя в него кнопки
 my_keyboard = ReplyKeyboardMarkup(
