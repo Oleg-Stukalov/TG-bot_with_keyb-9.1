@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import (KeyboardButton, Message, ReplyKeyboardMarkup,
                            ReplyKeyboardRemove)
 from environs import Env
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 # Create Env instance, read .env file
 env = Env()
@@ -21,39 +22,28 @@ dp = Dispatcher()
 keyboard: list[list[KeyboardButton]] = [
     [KeyboardButton(text=f'Кнопка {i}')] for i in range(1, 351)]
 
-# Создаем объект клавиатуры, добавляя в него список списков с кнопками
-keyboard = ReplyKeyboardMarkup(
-    keyboard=keyboard,
-    resize_keyboard=True
-)
+# Инициализируем билдер
+kb_builder = ReplyKeyboardBuilder()
+
+# Создаем первый список с кнопками
+buttons_1: list[KeyboardButton] = [
+    KeyboardButton(text=f'Кнопка {i + 1}') for i in range(10)
+]
+# Распаковываем список с кнопками методом add
+kb_builder.add(*buttons_1)
+
+# Явно сообщаем билдеру сколько хотим видеть кнопок в 1-м и 2-м рядах,
+# а также говорим методу повторять такое размещение для остальных рядов
+kb_builder.adjust(2, 1, repeat=True)
+
 
 # Этот хэндлер будет срабатывать на команду "/start"
 # и отправлять в чат клавиатуру
 @dp.message(CommandStart())
 async def process_start_command(message: Message):
     await message.answer(
-        text='Чего кошки боятся больше?',
-        reply_markup=keyboard
-    )
-
-
-# Этот хэндлер будет срабатывать на ответ "Собак 🦮"
-@dp.message(F.text == 'Собак 🦮')
-async def process_dog_answer(message: Message):
-    await message.answer(
-        text='Да, несомненно, кошки боятся собак. '
-             'Но вы видели как они боятся огурцов?',
-        reply_markup=ReplyKeyboardRemove()
-    )
-
-
-# Этот хэндлер будет срабатывать на ответ "Огурцов 🥒"
-@dp.message(F.text == 'Огурцов 🥒')
-async def process_cucumber_answer(message: Message):
-    await message.answer(
-        text='Да, иногда кажется, что огурцов '
-             'кошки боятся больше',
-        reply_markup=ReplyKeyboardRemove()
+        text='Вот такая получается клавиатура',
+        reply_markup=kb_builder.as_markup(resize_keyboard=True)
     )
 
 
